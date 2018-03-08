@@ -1,0 +1,41 @@
+<section class="content-center margin-top-2 margin-bottom-2">
+  <mat-card>
+    <form class="form">
+      <div class="fields text-center">
+        <mat-form-field class="margin-bottom-1">
+          <input matInput placeholder="User Name" [formControl]="username" required>
+          <mat-error *ngIf="username.invalid">This field is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="margin-bottom-1">
+          <input matInput placeholder="Enter your email" [formControl]="email" required>
+          <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="margin-bottom-1">
+          <input matInput placeholder="Password" [formControl]="password" type="password" required>
+          <mat-error *ngIf="password.invalid">This field is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="margin-bottom-3">
+          <input matInput placeholder="Password(confirm)" [formControl]="confirmPassword" type="password" required>
+          <mat-error *ngIf="confirmPassword.invalid">This field is required</mat-error>
+          <mat-error *ngIf="checkConfirmPassword()">Password does not match</mat-error>
+        </mat-form-field>
+
+        <mat-checkbox class="margin-bottom-3" [formControl]="terms" required>
+          <span class="a-label">I accept the
+            <a class="terms-condition">terms and conditions.</a>
+          </span>
+        </mat-checkbox>
+
+        <button class="margin-bottom-3" mat-raised-button color="primary" [disabled]="!checkFormValid()" (click)="submit()">
+          <strong>JOIN</strong>
+        </button>
+
+        <span>Already have an account?</span>
+        <a class="a-login" routerLink="/signin">Sign in here</a>
+      </div>
+    </form>
+  </mat-card>
+</section>

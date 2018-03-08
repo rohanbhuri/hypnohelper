@@ -1,0 +1,20 @@
+<mat-card class="header padding-top-1 padding-bottom-1">
+  <div class="row align-justify full-width">
+    <div class="small-12 medium-6 columns">
+      <button mat-button routerLink="/">
+        <img class="logo" src="assets/images/hypnohelper_logo_short.png" alt="">
+      </button>
+    </div>
+
+    <div *ngIf="!localStorage.getItem('currentUser')" class="small-12 medium-6 columns text-right">
+      <button class="signup" mat-button routerLink="/signup">
+        <mat-icon>add_circle</mat-icon> Sign Up</button>
+      <button class="signin" mat-button routerLink="/signin">
+        <mat-icon>vpn_key</mat-icon>
+        Sign In</button>
+    </div>
+    <div *ngIf="localStorage.getItem('currentUser')" class="small-12 medium-6 columns text-right">
+      <button mat-button routerLink="/logout">Logout</button>
+    </div>
+  </div>
+</mat-card>

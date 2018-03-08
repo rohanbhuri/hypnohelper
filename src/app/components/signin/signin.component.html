@@ -1,0 +1,27 @@
+<section class="content-center margin-top-4 margin-bottom-4">
+  <mat-card>
+    <form class="form">
+      <div class="fields text-center">
+
+        <mat-form-field class="margin-bottom-1">
+          <input matInput placeholder="Enter your email" [formControl]="email" required>
+          <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="margin-bottom-2">
+          <input matInput placeholder="Password" [formControl]="password" type="password" required>
+          <mat-error *ngIf="password.invalid">This field is required</mat-error>
+        </mat-form-field>
+
+        <a class="forgotPassword margin-bottom-2">Forgot Password?</a>
+
+        <button class="margin-bottom-2" [disabled]="!checkFormValid()" (click)="submit()" mat-raised-button color="primary">
+          <strong>SIGN IN</strong>
+        </button>
+
+        <span>Don't have an account?</span>
+        <a class="a-login" routerLink="/signup">Click here to create one</a>
+      </div>
+    </form>
+  </mat-card>
+</section>

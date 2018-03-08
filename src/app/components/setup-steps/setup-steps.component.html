@@ -1,0 +1,82 @@
+<mat-card>
+
+  <div class="step1" *ngIf="selectedStep == '1'">
+    <div class="row">
+      <div class="colomns small-12 content-center">
+        <h5>STEP 1</h5>
+      </div>
+      <div class="colomns small-12 content-center">
+        <img class="step1img" src="../../../assets/images/step1.png" alt="">
+      </div>
+      <div class="colomns small-12 content-center">
+        <p>Let's start with choosing one of these six beautiful backing tracks for your recording.</p>
+      </div>
+      <div class="colomns small-12">
+        <div class="row align-center">
+          <div class="colomns small-2 content-center">
+            <a class="selectMinutes" [ngClass]="{'selectedMin': selectedTiming  == '30'}" (click)='selectTracks("30")'>30 MINUTES</a>
+          </div>
+          <div class="colomns small-2 content-center">
+            <a class="selectMinutes" [ngClass]="{'selectedMin': selectedTiming == '60'}" (click)='selectTracks("60")'>60 MINUTES</a>
+          </div>
+        </div>
+      </div>
+      <div class="colomns small-12 content-center">
+        <div class="songs-container">
+          <div class="song text-center" *ngFor="let song of songs; let i = index">
+            <mat-icon *ngIf='currentlyPlaying != i' (click)="playTrack(i);">play_arrow</mat-icon>
+            <mat-icon *ngIf='currentlyPlaying == i' (click)="playTrack(i);">pause</mat-icon>
+            <span>Backing Track Name #{{i}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="colomns small-12 content-center margin-top-2">
+        <a class="nextBtn" (click)='selectStep("2")'>NEXT STEP</a>
+      </div>
+      <div class="colomns small-12 content-center margin-top-2">
+        <a class="backBtn">
+          <mat-icon>arrow_back</mat-icon> Back</a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="step2" *ngIf="selectedStep == '2'">
+    <div class="row">
+      <div class="colomns small-12 content-center">
+        <h5>STEP 2</h5>
+      </div>
+      <div class="colomns small-12 content-center">
+        <img class="step1img" src="../../../assets/images/step2.png" alt="">
+      </div>
+      <div class="colomns small-12 content-center">
+        <p>Let's choose an input source for your voice recording. We've found the following you can use:</p>
+      </div>
+      <div class="colomns small-12">
+        <div class="row align-center">
+          <div class="colomns small-4 content-center">
+            <a class="selectMinutes" [ngClass]="{'selectedMin': selectedMicType  == 'build-in'}" (click)='selectMicrophoneType("build-in")'>BUILD-IN MICROPHONE</a>
+          </div>
+          <div class="colomns small-4 content-center">
+            <a class="selectMinutes" [ngClass]="{'selectedMin': selectedMicType == 'headset'}" (click)='selectMicrophoneType("headset")'>HEADSET MICROPHONE</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="colomns small-12 content-center margin-top-2">
+        <a class="nextBtn" (click)='selectStep("2")'>
+          <mat-icon>mic_none</mat-icon> SET UP MICROPHONE</a>
+      </div>
+      <div class="colomns small-12 content-center margin-top-2">
+        <a class="backBtn">
+          <mat-icon>arrow_back</mat-icon> Back To Previous Step</a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="step3" *ngIf="selectedStep == '3'">
+
+  </div>
+
+</mat-card>

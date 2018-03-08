@@ -1,0 +1,21 @@
+.header {
+  img.logo {
+    max-width: 16rem;
+  }
+  .signup {
+    color: #666;
+    mat-icon {
+      color: #5493fe;
+      font-size: 1.4em;
+      vertical-align: text-top;
+    }
+  }
+  .signin {
+    color: #666;
+    mat-icon {
+      color: #ff7563;
+      font-size: 1.4em;
+      vertical-align: text-top;
+    }
+  }
+}

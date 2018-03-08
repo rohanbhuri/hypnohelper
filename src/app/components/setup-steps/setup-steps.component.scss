@@ -1,0 +1,53 @@
+.step1img {
+  max-width: 40rem;
+}
+
+.selectMinutes {
+  border: 1px solid #0359ed;
+  font-weight: bold;
+  color: #0359ed;
+  border-radius: 10rem;
+  padding: 1.2rem 2rem;
+}
+
+.selectedMin {
+  background-color: #0359ed;
+  color: #fff;
+}
+
+.songs-container {
+  padding: 1rem;
+  width: 35rem;
+  .song {
+    border: 1px solid #d3d3d6;
+    border-radius: 30rem;
+    margin: 0.6rem 0rem;
+    padding: .4rem 0.5rem;
+    mat-icon {
+      float: left;
+      color: #5493fe;
+      cursor: pointer;
+    }
+  }
+}
+
+.nextBtn {
+  border: 1px solid #0359ed;
+  font-weight: bold;
+  background-color: #0359ed;
+  color: #fff;
+  border-radius: 10rem;
+  padding: 1rem 6rem;
+  mat-icon {
+    vertical-align: middle;
+  }
+}
+
+.backBtn {
+  font-size: .8em;
+  font-weight: bold;
+  mat-icon {
+    vertical-align: middle;
+    font-size: 1.8em;
+  }
+}
