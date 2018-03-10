@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { Howl } from 'howler';
 
 @Component({
@@ -13,6 +13,10 @@ export class SetupStepsComponent implements OnInit {
   currentlyPlaying;
   selectedStep = '1';
   selectedMicType;
+
+  progress = 0;
+
+  availableRecordingDevices = [];
 
   music30mins = [
     {
@@ -79,6 +83,12 @@ export class SetupStepsComponent implements OnInit {
 
   selectStep(selectedStep) {
     this.selectedStep = selectedStep;
+    if (this.selectedStep === '2') {
+      this.getRecordingDevices();
+    }
+    if (this.selectedStep === '3') {
+      this.testRecordingDevice();
+    }
   }
 
   selectMicrophoneType(selectedMicType) {
@@ -101,6 +111,7 @@ export class SetupStepsComponent implements OnInit {
   playTrack(i) {
     //  pause all music and unload
     if (this.songs) {
+      this.progress = 0;
       this.songs.forEach(element => {
         if (element.howl) {
           element.howl.unload();
@@ -118,17 +129,24 @@ export class SetupStepsComponent implements OnInit {
     // Play and pause selected music
     if (this.currentlyPlaying === i) {
       this.currentlyPlaying = undefined;
+      this.progress = 0;
     } else {
       this.songs[i].howl.once('load', () => {
         this.songs[i].howl.play();
         this.ngZone.run(() => {
           this.currentlyPlaying = i;
         });
+        setInterval(() => {
+          this.ngZone.run(() => {
+            this.progress = (this.songs[i].howl.seek() / this.songs[i].howl._duration) * 100;
+          });
+        }, 1000);
       });
     }
   }
 
   musicCleanUp() {
+    this.progress = 0;
     if (this.songs) {
       this.songs.forEach(element => {
         if (element.howl) {
@@ -139,4 +157,57 @@ export class SetupStepsComponent implements OnInit {
       });
     }
   }
+
+  getRecordingDevices() {
+    navigator.mediaDevices.enumerateDevices().then((data) => {
+      data.forEach(element => {
+        console.log(element.kind);
+        if (element.kind === 'audioinput') {
+          this.availableRecordingDevices.push(element);
+        }
+      });
+      console.log(this.availableRecordingDevices);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+
+  testRecordingDevice() {
+    const audio = document.querySelector('audio');
+
+    const constraints = {
+      audio: true,
+      video: false
+    };
+
+    function handleError(error) {
+      console.log('navigator.getUserMedia error: ', error);
+    }
+
+    navigator.mediaDevices.getUserMedia(constraints).
+      then(this.handleSuccess).catch(handleError);
+
+  }
+
+  handleSuccess(stream) {
+    const audio = document.querySelector('audio');
+
+    const constraints = {
+      audio: true,
+      video: false
+    };
+
+    const audioTracks = stream.getAudioTracks();
+    console.log('Got stream with constraints:', constraints);
+    console.log('Using audio device: ' + audioTracks[0].label);
+    stream.oninactive = () => {
+      console.log('Stream ended');
+    };
+    audio.srcObject = stream;
+    console.log(stream);    
+    setInterval(() => {
+    }, 1000);
+  }
+
 }

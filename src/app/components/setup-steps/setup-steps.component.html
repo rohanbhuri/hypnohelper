@@ -8,8 +8,8 @@
       <div class="colomns small-12 content-center">
         <img class="step1img" src="../../../assets/images/step1.png" alt="">
       </div>
-      <div class="colomns small-12 content-center">
-        <p>Let's start with choosing one of these six beautiful backing tracks for your recording.</p>
+      <div class="colomns small-6 small-centered content-center">
+        <p class="text-center step-desc">Let's start with choosing one of these six beautiful backing tracks for your recording.</p>
       </div>
       <div class="colomns small-12">
         <div class="row align-center">
@@ -23,10 +23,15 @@
       </div>
       <div class="colomns small-12 content-center">
         <div class="songs-container">
-          <div class="song text-center" *ngFor="let song of songs; let i = index">
-            <mat-icon *ngIf='currentlyPlaying != i' (click)="playTrack(i);">play_arrow</mat-icon>
-            <mat-icon *ngIf='currentlyPlaying == i' (click)="playTrack(i);">pause</mat-icon>
-            <span>Backing Track Name #{{i}}</span>
+          <div class="song-inner-constainer text-center" [ngClass]="{'selectedTrack': song.howl}" *ngFor="let song of songs; let i = index">
+            <div *ngIf="song.howl" class="progress" [style.width.%]="progress"></div>
+            <div class="song">
+              <div class="play-pause-div">
+                <mat-icon *ngIf='currentlyPlaying != i' (click)="playTrack(i);">play_arrow</mat-icon>
+                <mat-icon *ngIf='currentlyPlaying == i' (click)="playTrack(i);">pause</mat-icon>
+              </div>
+              <span>Backing Track Name #{{i}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -47,12 +52,22 @@
         <h5>STEP 2</h5>
       </div>
       <div class="colomns small-12 content-center">
-        <img class="step1img" src="../../../assets/images/step2.png" alt="">
+        <img class="step2img" src="../../../assets/images/step2.png" alt="">
       </div>
-      <div class="colomns small-12 content-center">
-        <p>Let's choose an input source for your voice recording. We've found the following you can use:</p>
+      <div class="colomns small-6 small-centered content-center">
+        <p class="text-center step-desc">Let's choose an input source for your voice recording. We've found the following you can use:</p>
       </div>
-      <div class="colomns small-12">
+      <div class="colomns small-12 margin-top-2">
+        <div class="row align-center">
+          <div class="colomns small-4 content-center">
+            <img class="speaking-img" src="../../../assets/images/bulid-in-rec.png" alt="">
+          </div>
+          <div class="colomns small-4 content-center">
+            <img class="speaking-img" src="../../../assets/images/headphone-rec.png" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="colomns small-12 margin-bottom-4">
         <div class="row align-center">
           <div class="colomns small-4 content-center">
             <a class="selectMinutes" [ngClass]="{'selectedMin': selectedMicType  == 'build-in'}" (click)='selectMicrophoneType("build-in")'>BUILD-IN MICROPHONE</a>
@@ -64,11 +79,11 @@
       </div>
 
       <div class="colomns small-12 content-center margin-top-2">
-        <a class="nextBtn" (click)='selectStep("2")'>
+        <a class="nextBtn" (click)='selectStep("3")'>
           <mat-icon>mic_none</mat-icon> SET UP MICROPHONE</a>
       </div>
       <div class="colomns small-12 content-center margin-top-2">
-        <a class="backBtn">
+        <a class="backBtn" (click)='selectStep("1")'>
           <mat-icon>arrow_back</mat-icon> Back To Previous Step</a>
       </div>
     </div>
@@ -76,7 +91,40 @@
 
 
   <div class="step3" *ngIf="selectedStep == '3'">
+    <div class="row">
+      <div class="colomns small-12 content-center">
+        <h5>STEP 3</h5>
+      </div>
+      <div class="colomns small-12 content-center">
+        <img class="step3img" src="../../../assets/images/step3.png" alt="">
+      </div>
 
+      <div class="colomns small-6 small-centered content-center">
+        <p class="text-center step-desc">Start speaking in your regular voice into the microphone, and adjust the distance so that the sound volume is in
+          the green area. We advice being in a quiet environment for this and situate yourself around 20cm away from the
+          mic to improve sound quality.</p>
+      </div>
+      <div class="colomns small-12 content-center margin-top-1 margin-bottom-1">
+        <img class="speaking-img" src="../../../assets/images/speaking.png" alt="">
+      </div>
+
+      <div class="colomns small-12 content-center margin-top-1 margin-bottom-1 text-center">
+        <h3>
+          <strong>Start Speaking</strong>
+          <audio autoplay></audio>
+          <meter high="0.25" max="1" value="0"></meter>
+        </h3>
+      </div>
+
+      <div class="colomns small-12 content-center margin-top-2">
+        <a class="nextBtn" (click)='selectStep("3")'>
+          <mat-icon>arrow_forward</mat-icon>| SKIP SETUP</a>
+      </div>
+      <div class="colomns small-12 content-center margin-top-2">
+        <a class="backBtn" (click)='selectStep("2")'>
+          <mat-icon>arrow_back</mat-icon> Back To Previous Step</a>
+      </div>
+    </div>
   </div>
 
 </mat-card>

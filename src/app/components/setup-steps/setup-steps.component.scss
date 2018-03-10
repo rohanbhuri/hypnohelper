@@ -1,5 +1,19 @@
-.step1img {
+.step1img,
+.step2img,
+.step3img {
   max-width: 40rem;
+}
+
+.speaking-img {
+  max-width: 15rem;
+}
+
+.step-desc {
+  font-size: .9em;
+}
+
+mat-card {
+  min-height: 100vh;
 }
 
 .selectMinutes {
@@ -15,14 +29,37 @@
   color: #fff;
 }
 
+.selectedTrack {
+  border: 1px solid #4987fe !important;
+}
+
+.play-pause-div {
+  position: absolute;
+  top: .4rem;
+  z-index: 2;
+}
+
 .songs-container {
   padding: 1rem;
   width: 35rem;
-  .song {
+  .song-inner-constainer {
     border: 1px solid #d3d3d6;
     border-radius: 30rem;
     margin: 0.6rem 0rem;
+    position: relative;
+    overflow: hidden;
+    .progress {
+      position: absolute; // background-color: #5493fe; 
+      background-color: #ddeaff;
+      width: 0%;
+      height: 100%;
+    }
+  }
+  .song {
+    border-radius: 30rem;
     padding: .4rem 0.5rem;
+    color: #222;
+    mix-blend-mode: multiply;
     mat-icon {
       float: left;
       color: #5493fe;
@@ -51,3 +88,6 @@
     font-size: 1.8em;
   }
 }
+
+
+
