@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+
 
 @Component({
   selector: 'app-header',
@@ -7,7 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   localStorage = localStorage;
-  constructor() { }
+  url;
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.url = this.router.url;
+      }
+    });
+  }
 
   ngOnInit() {
   }

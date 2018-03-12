@@ -1,12 +1,12 @@
 <mat-card class="header padding-top-1 padding-bottom-1">
   <div class="row align-justify full-width">
-    <div class="small-12 medium-6 columns">
+    <div class="small-12 medium-6 columns" [ngClass]="{'content-center': url != '/home'}">
       <button mat-button routerLink="/">
         <img class="logo" src="assets/images/hypnohelper_logo_short.png" alt="">
       </button>
     </div>
 
-    <div *ngIf="!localStorage.getItem('currentUser')" class="small-12 medium-6 columns text-right">
+    <div *ngIf="!localStorage.getItem('currentUser') && url == '/home'" class="small-12 medium-6 columns text-right">
       <button class="signup" mat-button routerLink="/signup">
         <mat-icon>add_circle</mat-icon> Sign Up</button>
       <button class="signin" mat-button routerLink="/signin">

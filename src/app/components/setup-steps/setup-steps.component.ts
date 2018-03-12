@@ -1,5 +1,7 @@
 import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { Howl } from 'howler';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-setup-steps',
@@ -14,6 +16,7 @@ export class SetupStepsComponent implements OnInit {
   mic;
   instant;
   audioContext;
+  deviceId;
   /////////////////////////////////////////////////////
 
 
@@ -26,6 +29,8 @@ export class SetupStepsComponent implements OnInit {
   currentlyPlaying;
   selectedStep = '1';
   selectedMicType;
+
+  selectedTrack;
 
   progress = 0;
 
@@ -86,7 +91,8 @@ export class SetupStepsComponent implements OnInit {
   ];
 
   constructor(
-    public ngZone: NgZone
+    public ngZone: NgZone,
+    public location: Location
   ) { }
 
   ngOnInit() {
@@ -109,6 +115,9 @@ export class SetupStepsComponent implements OnInit {
 
   selectMicrophoneType(selectedMicType) {
     this.selectedMicType = selectedMicType;
+    if (selectedMicType === 'headset') {
+      this.deviceId = this.availableRecordingDevices[0].deviceId;
+    }
   }
 
   selectTracks(selectedTracks) {
@@ -121,6 +130,10 @@ export class SetupStepsComponent implements OnInit {
       this.selectedTiming = '60';
       this.songs = this.music30mins;
     }
+  }
+
+  selectTrack(song) {
+    this.selectedTrack = song.src;
   }
 
 
@@ -175,6 +188,7 @@ export class SetupStepsComponent implements OnInit {
   }
 
   getRecordingDevices() {
+    this.availableRecordingDevices = [];
     navigator.mediaDevices.enumerateDevices().then((data) => {
       data.forEach(element => {
         if (element.kind === 'audioinput' && element.deviceId !== 'default') {
@@ -191,13 +205,12 @@ export class SetupStepsComponent implements OnInit {
   testRecordingDevice() {
     const audio = document.querySelector('audio');
     const constraints = {
-      audio: true,
+      audio: { deviceId: this.deviceId ? this.deviceId : false },
       video: false
     };
 
     try {
-      window['AudioContext'] = window['AudioContext'] || window['webkitAudioContext'];
-      this.audioContext = window['AudioContext'] = new AudioContext();
+      this.audioContext = new AudioContext();
     } catch (e) {
       console.log('Web Audio API not supported.');
     }
