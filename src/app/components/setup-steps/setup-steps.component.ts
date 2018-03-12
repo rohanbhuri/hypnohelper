@@ -8,6 +8,20 @@ import { Howl } from 'howler';
 })
 export class SetupStepsComponent implements OnInit {
 
+
+  //////////////////////////////////////////////////////
+  context;
+  script;
+  mic;
+  instant;
+  audioContext;
+  /////////////////////////////////////////////////////
+
+
+
+
+
+
   selectedTiming;
   songs;
   currentlyPlaying;
@@ -87,7 +101,9 @@ export class SetupStepsComponent implements OnInit {
       this.getRecordingDevices();
     }
     if (this.selectedStep === '3') {
-      this.testRecordingDevice();
+      setTimeout(() => {
+        this.testRecordingDevice();
+      }, 1);
     }
   }
 
@@ -161,12 +177,10 @@ export class SetupStepsComponent implements OnInit {
   getRecordingDevices() {
     navigator.mediaDevices.enumerateDevices().then((data) => {
       data.forEach(element => {
-        console.log(element.kind);
         if (element.kind === 'audioinput') {
           this.availableRecordingDevices.push(element);
         }
       });
-      console.log(this.availableRecordingDevices);
     }).catch((err) => {
       console.log(err);
     });
@@ -175,39 +189,77 @@ export class SetupStepsComponent implements OnInit {
 
   testRecordingDevice() {
     const audio = document.querySelector('audio');
-
     const constraints = {
       audio: true,
       video: false
     };
 
-    function handleError(error) {
-      console.log('navigator.getUserMedia error: ', error);
+    try {
+      window['AudioContext'] = window['AudioContext'] || window['webkitAudioContext'];
+      this.audioContext = window['AudioContext'] = new AudioContext();
+    } catch (e) {
+      alert('Web Audio API not supported.');
     }
 
     navigator.mediaDevices.getUserMedia(constraints).
-      then(this.handleSuccess).catch(handleError);
+      then(stream => {
+        console.log('Audio Stream', stream);
+        const audioTracks = stream.getAudioTracks();
+        console.log('Got stream with constraints:', constraints);
+        console.log('Using audio device: ' + audioTracks[0].label);
+        stream.oninactive = () => {
+          console.log('Stream ended');
+        };
+
+        audio.srcObject = stream;
+
+        this.connectToSource(stream, (e) => {
+          if (e) {
+            alert(e);
+            return;
+          }
+          this.SoundMeter();
+        });
+
+      }).catch(err => { console.log('navigator.getUserMedia error: ', err); });
+  }
+
+  SoundMeter() {
+    console.log(this.mic);
+    this.script.onaudioprocess = (event) => {
+      const input = event.inputBuffer.getChannelData(0);
+      let i;
+      let sum = 0.0;
+      let clipcount = 0;
+      for (i = 0; i < input.length; ++i) {
+        sum += input[i] * input[i];
+        if (Math.abs(input[i]) > 0.99) {
+          clipcount += 1;
+        }
+      }
+      this.instant = Math.sqrt(sum / input.length);
+      console.log(this.instant);
+    };
 
   }
 
-  handleSuccess(stream) {
-    const audio = document.querySelector('audio');
-
-    const constraints = {
-      audio: true,
-      video: false
-    };
-
-    const audioTracks = stream.getAudioTracks();
-    console.log('Got stream with constraints:', constraints);
-    console.log('Using audio device: ' + audioTracks[0].label);
-    stream.oninactive = () => {
-      console.log('Stream ended');
-    };
-    audio.srcObject = stream;
-    console.log(stream);    
-    setInterval(() => {
-    }, 1000);
+  connectToSource(stream, callback) {
+    console.log('SoundMeter connecting', stream);
+    try {
+      this.mic = this.audioContext.createMediaStreamSource(stream);
+      this.script = this.audioContext.createScriptProcessor(2048, 1, 1);
+      this.mic.connect(this.script);
+      // necessary to make sample run, but should not be.
+      this.script.connect(this.audioContext.destination);
+      if (typeof callback !== 'undefined') {
+        callback(null);
+      }
+    } catch (e) {
+      console.error(e);
+      if (typeof callback !== 'undefined') {
+        callback(e);
+      }
+    }
   }
 
 }
