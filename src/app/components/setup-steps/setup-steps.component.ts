@@ -10,7 +10,6 @@ export class SetupStepsComponent implements OnInit {
 
 
   //////////////////////////////////////////////////////
-  context;
   script;
   mic;
   instant;
@@ -98,6 +97,7 @@ export class SetupStepsComponent implements OnInit {
   selectStep(selectedStep) {
     this.selectedStep = selectedStep;
     if (this.selectedStep === '2') {
+      this.musicCleanUp();
       this.getRecordingDevices();
     }
     if (this.selectedStep === '3') {
@@ -177,13 +177,14 @@ export class SetupStepsComponent implements OnInit {
   getRecordingDevices() {
     navigator.mediaDevices.enumerateDevices().then((data) => {
       data.forEach(element => {
-        if (element.kind === 'audioinput') {
+        if (element.kind === 'audioinput' && element.deviceId !== 'default') {
           this.availableRecordingDevices.push(element);
         }
       });
     }).catch((err) => {
       console.log(err);
     });
+    console.log(this.availableRecordingDevices);
   }
 
 
@@ -198,7 +199,7 @@ export class SetupStepsComponent implements OnInit {
       window['AudioContext'] = window['AudioContext'] || window['webkitAudioContext'];
       this.audioContext = window['AudioContext'] = new AudioContext();
     } catch (e) {
-      alert('Web Audio API not supported.');
+      console.log('Web Audio API not supported.');
     }
 
     navigator.mediaDevices.getUserMedia(constraints).
@@ -237,8 +238,10 @@ export class SetupStepsComponent implements OnInit {
           clipcount += 1;
         }
       }
-      this.instant = Math.sqrt(sum / input.length);
-      console.log(this.instant);
+      this.ngZone.run(() => {
+        this.instant = Math.sqrt(sum / input.length).toFixed(2);
+      });
+      // console.log(this.instant);
     };
 
   }
@@ -259,6 +262,18 @@ export class SetupStepsComponent implements OnInit {
       if (typeof callback !== 'undefined') {
         callback(e);
       }
+    }
+  }
+
+  getSoundMeterColor(instant) {
+    if (instant > 0 && instant <= 0.25) {
+      return '#ffda30';
+    }
+    if (instant > 0.25 && instant <= 0.6) {
+      return '#5493fe';
+    }
+    if (instant > 0.6 && instant <= 1) {
+      return '#ff6d6d';
     }
   }
 

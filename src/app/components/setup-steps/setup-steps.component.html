@@ -108,12 +108,19 @@
         <img class="speaking-img" src="../../../assets/images/speaking.png" alt="">
       </div>
 
-      <div class="colomns small-12 content-center margin-top-1 margin-bottom-1 text-center">
+      <div class="colomns small-12 content-center margin-top-2 margin-bottom-1 text-center">
         <h3>
           <strong>Start Speaking</strong>
-          <audio controls autoplay></audio>
-          <meter high="0.25" max="1" value="{{instant}}"></meter>
+          <audio autoplay></audio>
         </h3>
+      </div>
+
+      <div class="colomns small-4 small-centered content-center margin-top-1 margin-bottom-2 text-center">
+        <!-- <meter class="meter" high="0.25" max="1" value="{{instant}}"></meter> -->
+        <div class="sound-meter" *ngFor="let data of [0.1, 0.13, 0.18,0.2,0.25,0.3,0.4, 0.45,0.5,0.6,0.7,0.8,0.9,1] let i = index">
+          <span *ngIf="instant > data" [style.backgroundColor]="getSoundMeterColor(instant)" class="meter-point">.</span>
+          <span *ngIf="!(instant > data)" class="meter-point">.</span>
+        </div>
       </div>
 
       <div class="colomns small-12 content-center margin-top-2">

@@ -89,5 +89,13 @@ mat-card {
   }
 }
 
+meter.meter {
+  width: 100%;
+}
 
-
+span.meter-point {
+  background-color: #ececec;
+  color: transparent;
+  padding: 0.4rem;
+  border-radius: 20px;
+}
